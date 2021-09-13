@@ -126,7 +126,7 @@ export default {
       default: false,
     },
     autoplaySpeed: {
-      type: Boolean,
+      type: [Boolean, Number],
       default: false,
     },
     autoplayTimeout: {
@@ -166,8 +166,8 @@ export default {
       default: 200,
     },
     responsiveBaseElement: {
-        type: String,
-        "default": "window"
+      type: String,
+      default: 'window',
     },
     video: {
       type: Boolean,
@@ -226,6 +226,7 @@ export default {
       prevHandler: 'carousel_prev_' + this.generateUniqueId(),
       elementHandle: 'carousel_' + this.generateUniqueId(),
       nextHandler: 'carousel_next_' + this.generateUniqueId(),
+      owlInstance: undefined,
     };
   },
 
@@ -282,6 +283,8 @@ export default {
       checkVisible: this.checkVisible,
     });
 
+    this.owlInstance = owl;
+
     $('#' + this.prevHandler).click(function() {
       owl.trigger('prev.owl.carousel');
     });
@@ -320,6 +323,12 @@ export default {
   methods: {
     generateUniqueId() {
       return Math.random().toString(36).substring(2, 15);
+    },
+    stopAutoplay() {
+      this.owlInstance.trigger('stop.owl.autoplay');
+    },
+    runsAutoplay(timeout, speed) {
+      this.owlInstance.trigger('play.owl.autoplay', [timeout, speed]);
     },
   },
 };
